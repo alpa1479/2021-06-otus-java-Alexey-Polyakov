@@ -18,13 +18,23 @@ allprojects {
     group "ru.otus"
 
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 
     apply plugin: "io.spring.dependency-management"
     dependencyManagement {
         dependencies {
+            imports {
+                mavenBom("org.springframework.boot:spring-boot-dependencies:2.5.2")
+            }
             dependency("com.google.guava:guava:${Versions.guava}")
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            failOnVersionConflict()
         }
     }
 }
