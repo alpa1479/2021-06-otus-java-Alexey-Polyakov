@@ -30,30 +30,32 @@ public final class TestRunner {
         val testMethods = Reflections.getMethodsWithAnnotation(testClass, Test.class);
         val afterMethod = Reflections.getMethodWithAnnotation(testClass, After.class);
 
-        List<InvokedTestResult> invokedTestResults = invokeTests(testClass, testMethods, beforeMethod, afterMethod);
+        List<InvokedTestResult> invokedTestResults = invokeTests(testClass, testMethods,
+                beforeMethod.orElse(null), afterMethod.orElse(null)
+        );
         TestsResultInformation testsResultInformation = new TestsResultInformation(invokedTestResults);
         testResultPrinter.printResults(testsResultInformation);
     }
 
     private List<InvokedTestResult> invokeTests(Class<?> testClass, List<Method> testMethods,
-                                                Optional<Method> beforeMethod, Optional<Method> afterMethod) {
+                                                Method beforeMethod, Method afterMethod) {
         return testMethods.stream()
                 .map(testMethod -> invokeTest(testClass, testMethod, beforeMethod, afterMethod))
                 .collect(Collectors.toList());
     }
 
     private InvokedTestResult invokeTest(Class<?> testClass, Method testMethod,
-                                         Optional<Method> beforeMethod, Optional<Method> afterMethod) {
+                                         Method beforeMethod, Method afterMethod) {
         val testClassInstance = Reflections.instantiate(testClass);
         val testResult = new InvokedTestResult(testClass, testMethod, true);
         try {
-            beforeMethod.ifPresent(before -> Reflections.callMethod(testClassInstance, before));
+            Optional.ofNullable(beforeMethod).ifPresent(before -> Reflections.callMethod(testClassInstance, before));
             Reflections.callMethod(testClassInstance, testMethod);
         } catch (Exception e) {
             testResult.setCause(e.getCause());
             testResult.setSuccess(false);
         } finally {
-            afterMethod.ifPresent(after -> Reflections.callMethod(testClassInstance, after));
+            Optional.ofNullable(afterMethod).ifPresent(after -> Reflections.callMethod(testClassInstance, after));
         }
         return testResult;
     }
