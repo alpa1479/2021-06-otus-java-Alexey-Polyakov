@@ -11,21 +11,28 @@ package ru.otus.hw04;
 */
 
 /*
------------------------------------------ Results (without optimization):
--Xmx256m:                   -Xmx2048m:                  -Xmx1024m:                  -Xmx4g:
-spend msec:34592, sec:34    spend msec:28494, sec:28    spend msec:32810, sec:32    spend msec:30090, sec:30
-spend msec:30413, sec:30    spend msec:29398, sec:29    spend msec:29370, sec:29    spend msec:28822, sec:28
-spend msec:30360, sec:30    spend msec:30615, sec:30    spend msec:29705, sec:29    spend msec:28622, sec:28
------------------------------------------- Results (with int optimization):
--Xmx256m:                   -Xmx1024m:
-spend msec:5585, sec:5      spend msec:5496, sec:5
-spend msec:5254, sec:5      spend msec:5510, sec:5
-spend msec:5489, sec:5      spend msec:5885, sec:5
------------------------------------------- Results (with singleton data instance optimization):
--Xmx1024m:
-spend msec:4416, sec:4
-spend msec:4439, sec:4
-spend msec:3990, sec:3
+----------------------------------------- Results (without optimization): -------------------------------------------
+-Xmx256m:                 |  -Xmx2048m:                |  -Xmx4096m:                |  -Xmx1900m:
+spend msec:45482, sec:45  |  spend msec:21232, sec:21  |  spend msec:22613, sec:22  |  spend msec:20792, sec:20
+spend msec:42244, sec:42  |  spend msec:21376, sec:21  |  spend msec:21808, sec:21  |  spend msec:20331, sec:20
+spend msec:43268, sec:43  |  spend msec:21094, sec:21  |  spend msec:22316, sec:22  |  spend msec:20702, sec:20
+-Xmx1500m:                |  -Xmx1600m:                |  -Xmx1800m:                |  -Xmx1850m:
+spend msec:22243, sec:22  |  spend msec:21718, sec:21  |  spend msec:21857, sec:21  |  spend msec:19772, sec:19
+spend msec:22678, sec:22  |  spend msec:21923, sec:21  |  spend msec:22074, sec:22  |  spend msec:19770, sec:19
+spend msec:22567, sec:22  |  spend msec:22145, sec:22  |  spend msec:21784, sec:21  |  spend msec:19811, sec:19
+                                                                                    |  spend msec:19533, sec:19
+                                                                                    |  spend msec:19415, sec:19
+------------------------------------------ Results (with int optimization): -----------------------------------------
+-Xmx256m:                 |  -Xmx1850m:              |  -Xmx500m:
+spend msec:6582, sec:6    |  spend msec:4512, sec:4  |  spend msec:4152, sec:4
+spend msec:6472, sec:6    |  spend msec:4318, sec:4  |  spend msec:4266, sec:4
+spend msec:6710, sec:6    |  spend msec:4463, sec:4  |  spend msec:4260, sec:4
+------------------------------------------ Results (with singleton data instance optimization): ---------------------
+-Xmx256m:                 |  -Xmx500m:               |  -Xmx150m:
+spend msec:3394, sec:3    |  spend msec:3485, sec:3  |  spend msec:3543, sec:3
+spend msec:3306, sec:3    |  spend msec:3262, sec:3  |  spend msec:3866, sec:3
+spend msec:3261, sec:3    |  spend msec:3335, sec:3  |  spend msec:3598, sec:3
+---------------------------------------------------------------------------------------------------------------------
 */
 
 import java.time.LocalDateTime;
