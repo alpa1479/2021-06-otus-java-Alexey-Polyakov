@@ -7,3 +7,6 @@ Alexey Polyakov / Алексей Поляков<br>
 
 ### Список директорий с заданиями
 1. hw01-gradle<br>
+2. hw02-generics<br>
+3. hw03-reflection<br>
+4. hw04-gc<br>
