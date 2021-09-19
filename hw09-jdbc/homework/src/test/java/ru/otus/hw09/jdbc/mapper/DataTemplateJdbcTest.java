@@ -35,16 +35,24 @@ public class DataTemplateJdbcTest {
             .withClasspathResourceMapping("00_createTables.sql", "/docker-entrypoint-initdb.d/00_createTables.sql", BindMode.READ_ONLY)
             .withClasspathResourceMapping("01_insertData.sql", "/docker-entrypoint-initdb.d/01_insertData.sql", BindMode.READ_ONLY);
 
-    @ParameterizedTest(name = "{index} - Should return selected objects for {0}")
-    @MethodSource("provideArgumentsForSelect")
-    <T> void shouldSelectAll(String displayName, Class<T> targetClass, List<T> targetItems) throws SQLException {
+    <T> DataTemplate<T> setUpDataTemplate(Class<T> targetClass) {
         DbExecutor dbExecutor = new DbExecutorImpl();
         EntityClassMetaData<T> entityClassMetaData = new EntityClassMetaDataImpl<>(targetClass);
-        DataTemplate<T> dataTemplate = new DataTemplateJdbc<>(dbExecutor, entityClassMetaData);
+        return new DataTemplateJdbc<>(dbExecutor, entityClassMetaData);
+    }
+
+    Connection setUpConnection() throws SQLException {
         DriverManagerDataSource dataSource = new DriverManagerDataSource(
                 POSTGRE_SQL_CONTAINER.getJdbcUrl(), POSTGRE_SQL_CONTAINER.getUsername(), POSTGRE_SQL_CONTAINER.getPassword()
         );
-        Connection connection = dataSource.getConnection();
+        return dataSource.getConnection();
+    }
+
+    @ParameterizedTest(name = "{index} - Should return selected objects for {0}")
+    @MethodSource("provideArgumentsForSelect")
+    <T> void shouldSelectAll(String displayName, Class<T> targetClass, List<T> targetItems) throws SQLException {
+        DataTemplate<T> dataTemplate = setUpDataTemplate(targetClass);
+        Connection connection = setUpConnection();
 
         List<?> selectedItems = dataTemplate.findAll(connection);
         Assertions.assertThat(selectedItems).isEqualTo(targetItems);
@@ -53,13 +61,8 @@ public class DataTemplateJdbcTest {
     @ParameterizedTest(name = "{index} - Should return selected object by id for {0}")
     @MethodSource("provideArgumentsForSelectById")
     <T> void shouldSelectById(String displayName, Class<T> targetClass, Object targetItem) throws SQLException {
-        DbExecutor dbExecutor = new DbExecutorImpl();
-        EntityClassMetaData<T> entityClassMetaData = new EntityClassMetaDataImpl<>(targetClass);
-        DataTemplate<T> dataTemplate = new DataTemplateJdbc<>(dbExecutor, entityClassMetaData);
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(
-                POSTGRE_SQL_CONTAINER.getJdbcUrl(), POSTGRE_SQL_CONTAINER.getUsername(), POSTGRE_SQL_CONTAINER.getPassword()
-        );
-        Connection connection = dataSource.getConnection();
+        DataTemplate<T> dataTemplate = setUpDataTemplate(targetClass);
+        Connection connection = setUpConnection();
 
         Optional<?> selectedItem = dataTemplate.findById(connection, 1L);
         Assertions.assertThat(selectedItem).isPresent().get().isEqualTo(targetItem);
@@ -68,13 +71,8 @@ public class DataTemplateJdbcTest {
     @ParameterizedTest(name = "{index} - Should insert objects for {0}")
     @MethodSource("provideArgumentsForInsert")
     <T> void shouldInsert(String displayName, Class<T> targetClass, T insertObject, T targetObject) throws SQLException {
-        DbExecutor dbExecutor = new DbExecutorImpl();
-        EntityClassMetaData<T> entityClassMetaData = new EntityClassMetaDataImpl<>(targetClass);
-        DataTemplate<T> dataTemplate = new DataTemplateJdbc<>(dbExecutor, entityClassMetaData);
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(
-                POSTGRE_SQL_CONTAINER.getJdbcUrl(), POSTGRE_SQL_CONTAINER.getUsername(), POSTGRE_SQL_CONTAINER.getPassword()
-        );
-        Connection connection = dataSource.getConnection();
+        DataTemplate<T> dataTemplate = setUpDataTemplate(targetClass);
+        Connection connection = setUpConnection();
 
         long insertedItemId = dataTemplate.insert(connection, insertObject);
         Optional<T> selectedItem = dataTemplate.findById(connection, insertedItemId);
@@ -84,13 +82,8 @@ public class DataTemplateJdbcTest {
     @ParameterizedTest(name = "{index} - Should update objects for {0}")
     @MethodSource("provideArgumentsForUpdate")
     <T> void shouldUpdate(String displayName, Class<T> targetClass, T updateObject, long updateObjectId) throws SQLException {
-        DbExecutor dbExecutor = new DbExecutorImpl();
-        EntityClassMetaData<T> entityClassMetaData = new EntityClassMetaDataImpl<>(targetClass);
-        DataTemplate<T> dataTemplate = new DataTemplateJdbc<>(dbExecutor, entityClassMetaData);
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(
-                POSTGRE_SQL_CONTAINER.getJdbcUrl(), POSTGRE_SQL_CONTAINER.getUsername(), POSTGRE_SQL_CONTAINER.getPassword()
-        );
-        Connection connection = dataSource.getConnection();
+        DataTemplate<T> dataTemplate = setUpDataTemplate(targetClass);
+        Connection connection = setUpConnection();
 
         dataTemplate.update(connection, updateObject);
         Optional<T> selectedItem = dataTemplate.findById(connection, updateObjectId);

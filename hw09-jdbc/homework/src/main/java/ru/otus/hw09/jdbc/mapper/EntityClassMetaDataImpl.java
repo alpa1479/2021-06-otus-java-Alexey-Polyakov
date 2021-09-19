@@ -15,45 +15,54 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
 
     private static final Logger log = LoggerFactory.getLogger(EntityClassMetaDataImpl.class);
 
-    private final Class<T> targetClass;
+    private final String name;
+    private Constructor<T> constructor;
+    private final Field idField;
+    private final List<Field> allFields;
+    private final List<Field> allFieldsWithoutId;
 
     public EntityClassMetaDataImpl(Class<T> targetClass) {
-        this.targetClass = targetClass;
+        this.name = targetClass.getSimpleName().toLowerCase(Locale.ENGLISH);
+
+        try {
+            this.constructor = targetClass.getDeclaredConstructor();
+        } catch (NoSuchMethodException e) {
+            log.error("Cant find constructor for the provided class", e);
+        }
+
+        final Field[] declaredFields = targetClass.getDeclaredFields();
+        this.idField = Arrays.stream(declaredFields)
+                .filter(field -> field.isAnnotationPresent(Id.class))
+                .findFirst()
+                .orElse(null);
+        this.allFields = Arrays.asList(declaredFields);
+        this.allFieldsWithoutId = Arrays.stream(declaredFields)
+                .filter(field -> !field.isAnnotationPresent(Id.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public String getName() {
-        return targetClass.getSimpleName().toLowerCase(Locale.ENGLISH);
+        return name;
     }
 
     @Override
     public Constructor<T> getConstructor() {
-        Constructor<T> constructor = null;
-        try {
-            constructor = targetClass.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            log.error("Cant find constructor for the provided class", e);
-        }
         return constructor;
     }
 
     @Override
     public Field getIdField() {
-        return Arrays.stream(targetClass.getDeclaredFields())
-                .filter(field -> field.isAnnotationPresent(Id.class))
-                .findFirst()
-                .orElse(null);
+        return idField;
     }
 
     @Override
     public List<Field> getAllFields() {
-        return Arrays.asList(targetClass.getDeclaredFields());
+        return allFields;
     }
 
     @Override
     public List<Field> getFieldsWithoutId() {
-        return Arrays.stream(targetClass.getDeclaredFields())
-                .filter(field -> !field.isAnnotationPresent(Id.class))
-                .collect(Collectors.toList());
+        return allFieldsWithoutId;
     }
 }
