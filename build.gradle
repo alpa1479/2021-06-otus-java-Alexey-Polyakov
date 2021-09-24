@@ -29,12 +29,17 @@ allprojects {
                 mavenBom("org.springframework.boot:spring-boot-dependencies:2.5.2")
             }
             dependency("com.google.guava:guava:${Versions.guava}")
+            dependency("org.testcontainers:junit-jupiter:${Versions.testcontainers}")
+            dependency("org.testcontainers:postgresql:${Versions.testcontainers}")
         }
     }
 
     configurations.all {
         resolutionStrategy {
             failOnVersionConflict()
+        }
+        resolutionStrategy {
+            force("net.java.dev.jna:jna:5.8.0")
         }
     }
 }
