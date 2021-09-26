@@ -4,6 +4,7 @@ import ru.otus.hw07.handler.ComplexProcessor;
 import ru.otus.hw07.listener.homework.HistoryListener;
 import ru.otus.hw07.model.Message;
 import ru.otus.hw07.model.ObjectForMessage;
+import ru.otus.hw07.processor.homework.DateTimeProviderImpl;
 import ru.otus.hw07.processor.homework.EvenSecondExceptionProcessor;
 import ru.otus.hw07.processor.homework.SwapProcessor;
 
@@ -25,7 +26,7 @@ public class HomeWork {
     public static void main(String[] args) {
         var processors = List.of(
                 new SwapProcessor(),
-                new EvenSecondExceptionProcessor()
+                new EvenSecondExceptionProcessor(new DateTimeProviderImpl())
         );
 
         var complexProcessor = new ComplexProcessor(processors, Throwable::printStackTrace);
