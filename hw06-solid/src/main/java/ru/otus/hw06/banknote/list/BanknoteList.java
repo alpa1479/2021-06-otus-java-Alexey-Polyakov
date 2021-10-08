@@ -1,10 +1,10 @@
-package ru.otus.hw06.currency;
+package ru.otus.hw06.banknote.list;
 
 import ru.otus.hw06.banknote.Banknote;
 
 import java.util.List;
 
-public interface Currency {
+public interface BanknoteList {
 
     int getTotalAmount();
 

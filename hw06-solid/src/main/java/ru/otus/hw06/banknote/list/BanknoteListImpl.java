@@ -1,4 +1,4 @@
-package ru.otus.hw06.currency;
+package ru.otus.hw06.banknote.list;
 
 import ru.otus.hw06.banknote.Banknote;
 
@@ -7,21 +7,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public final class CurrencyImpl implements Currency {
+public final class BanknoteListImpl implements BanknoteList {
 
     private final List<Banknote> banknotes;
 
-    CurrencyImpl(Banknote... banknotes) {
+    BanknoteListImpl(Banknote... banknotes) {
         this.banknotes = new ArrayList<>(Arrays.asList(banknotes));
     }
 
-    CurrencyImpl(List<Banknote> banknotes) {
+    BanknoteListImpl(List<Banknote> banknotes) {
         this.banknotes = new ArrayList<>(banknotes);
     }
 
     @Override
     public int getTotalAmount() {
-        return banknotes.stream().mapToInt(Banknote::getValue).sum();
+        return banknotes.stream().mapToInt(Banknote::getDenominationValue).sum();
     }
 
     @Override
@@ -37,7 +37,7 @@ public final class CurrencyImpl implements Currency {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        CurrencyImpl currency = (CurrencyImpl) o;
+        BanknoteListImpl currency = (BanknoteListImpl) o;
         return Objects.equals(banknotes, currency.banknotes);
     }
 
@@ -48,7 +48,7 @@ public final class CurrencyImpl implements Currency {
 
     @Override
     public String toString() {
-        return "UnknownCurrency{" +
+        return "BanknoteListImpl{" +
                 "banknotes=" + banknotes +
                 '}';
     }

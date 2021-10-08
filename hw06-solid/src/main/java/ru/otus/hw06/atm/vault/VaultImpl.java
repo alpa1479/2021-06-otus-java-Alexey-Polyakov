@@ -4,10 +4,10 @@ import ru.otus.hw06.atm.exception.EmptyVaultException;
 import ru.otus.hw06.banknote.Banknote;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TreeMap;
 
 import static ru.otus.hw06.util.Validations.requireNonEmpty;
@@ -17,24 +17,23 @@ public class VaultImpl implements Vault {
     private final Map<Banknote, Integer> banknotesStorage;
 
     public VaultImpl() {
-        this.banknotesStorage = new TreeMap<>(Comparator.comparing(Banknote::getValue).reversed());
+        this.banknotesStorage = new TreeMap<>(Comparator.comparing(Banknote::getDenominationValue).reversed());
     }
 
     @Override
-    public Optional<List<Banknote>> get(int amount) {
+    public List<Banknote> get(int amount) {
         requireNonEmpty(banknotesStorage, () -> new EmptyVaultException("no banknotes in vault"));
         List<Banknote> banknotes = new ArrayList<>();
         amount = fillBanknotesWithAmount(amount, banknotes);
-        return amount == 0 ? Optional.of(banknotes) : Optional.empty();
+        return amount == 0 ? banknotes : Collections.emptyList();
     }
 
     @Override
     public void put(List<Banknote> banknotes) {
-        banknotes.forEach(banknote -> Optional.ofNullable(banknotesStorage.get(banknote))
-                .ifPresentOrElse(
-                        count -> banknotesStorage.put(banknote, ++count),
-                        () -> banknotesStorage.put(banknote, 1)
-                ));
+        for (Banknote banknote : banknotes) {
+            Integer banknotesCount = banknotesStorage.get(banknote);
+            banknotesStorage.put(banknote, banknotesCount != null ? ++banknotesCount : 1);
+        }
     }
 
     @Override
@@ -45,7 +44,7 @@ public class VaultImpl implements Vault {
     }
 
     private int calculateBanknoteEntryBalance(Map.Entry<Banknote, Integer> banknoteEntry) {
-        return banknoteEntry.getKey().getValue() * banknoteEntry.getValue();
+        return banknoteEntry.getKey().getDenominationValue() * banknoteEntry.getValue();
     }
 
     private int fillBanknotesWithAmount(int amount, List<Banknote> banknotes) {
@@ -53,7 +52,7 @@ public class VaultImpl implements Vault {
             if (amount != 0) {
                 Banknote banknote = banknoteEntry.getKey();
                 int count = banknoteEntry.getValue();
-                int banknoteValue = banknote.getValue();
+                int banknoteValue = banknote.getDenominationValue();
                 int requiredBanknotesCount = Math.min(amount / banknoteValue, count);
                 if (requiredBanknotesCount > 0) {
                     int remainingCount = count - requiredBanknotesCount;

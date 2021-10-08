@@ -6,10 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.hw06.atm.exception.EmptyVaultException;
 import ru.otus.hw06.banknote.Banknote;
-import ru.otus.hw06.banknote.UnknownBanknote;
+import ru.otus.hw06.denomination.Denomination;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
@@ -22,9 +21,9 @@ public class VaultImplTest {
     void setUp() {
         vault = new VaultImpl();
         banknotes = List.of(
-                UnknownBanknote.ONE_HUNDRED,
-                UnknownBanknote.ONE_HUNDRED,
-                UnknownBanknote.ONE_HUNDRED
+                Banknote.with(Denomination.ONE_HUNDRED),
+                Banknote.with(Denomination.ONE_HUNDRED),
+                Banknote.with(Denomination.ONE_HUNDRED)
         );
     }
 
@@ -50,10 +49,10 @@ public class VaultImplTest {
         vault.put(banknotes);
 
         //when
-        final Optional<List<Banknote>> banknotes = vault.get(amount);
+        final List<Banknote> banknotes = vault.get(amount);
 
         //then
-        Assertions.assertThat(banknotes).isPresent().isEqualTo(banknotes);
+        Assertions.assertThat(banknotes).isEqualTo(banknotes);
     }
 
     @Test

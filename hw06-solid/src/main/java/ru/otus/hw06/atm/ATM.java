@@ -1,12 +1,12 @@
 package ru.otus.hw06.atm;
 
-import ru.otus.hw06.currency.Currency;
+import ru.otus.hw06.banknote.list.BanknoteList;
 
 public interface ATM {
 
-    void deposit(Currency currency);
+    void deposit(BanknoteList banknoteList);
 
-    Currency withdraw(int amount);
+    BanknoteList withdraw(int amount);
 
     int getBalance();
 }

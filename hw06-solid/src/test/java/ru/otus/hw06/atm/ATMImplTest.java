@@ -8,36 +8,37 @@ import ru.otus.hw06.atm.exception.ATMInputException;
 import ru.otus.hw06.atm.exception.WithdrawException;
 import ru.otus.hw06.atm.vault.Vault;
 import ru.otus.hw06.atm.vault.VaultImpl;
-import ru.otus.hw06.banknote.UnknownBanknote;
-import ru.otus.hw06.currency.Currency;
-import ru.otus.hw06.currency.CurrencyFactory;
-import ru.otus.hw06.currency.CurrencyFactoryImpl;
+import ru.otus.hw06.banknote.Banknote;
+import ru.otus.hw06.denomination.Denomination;
+import ru.otus.hw06.banknote.list.BanknoteList;
+import ru.otus.hw06.banknote.list.BanknoteListFactory;
+import ru.otus.hw06.banknote.list.BanknoteListFactoryImpl;
 
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 
 public class ATMImplTest {
 
     private ATM atm;
-    private Currency currency;
-    private CurrencyFactory currencyFactory;
+    private BanknoteList banknoteList;
+    private BanknoteListFactory banknoteListFactory;
 
     @BeforeEach
     void setUp() {
         Vault vault = new VaultImpl();
-        currencyFactory = new CurrencyFactoryImpl();
-        currency = currencyFactory.from(
-                UnknownBanknote.ONE_HUNDRED,
-                UnknownBanknote.ONE_HUNDRED,
-                UnknownBanknote.ONE_HUNDRED
+        banknoteListFactory = new BanknoteListFactoryImpl();
+        banknoteList = banknoteListFactory.from(
+                Banknote.with(Denomination.ONE_HUNDRED),
+                Banknote.with(Denomination.ONE_HUNDRED),
+                Banknote.with(Denomination.ONE_HUNDRED)
         );
-        atm = new ATMImpl(vault, currencyFactory);
+        atm = new ATMImpl(vault, banknoteListFactory);
     }
 
     @Test
     @DisplayName("Should deposit specified currency to ATM and return current balance")
     void shouldDepositSpecifiedCurrencyAndReturnCurrentBalance() {
         //when
-        atm.deposit(currency);
+        atm.deposit(banknoteList);
 
         //then
         final int balance = atm.getBalance();
@@ -49,13 +50,13 @@ public class ATMImplTest {
     void shouldDepositCurrencyThenWithdrawSpecifiedAmount() {
         // given
         int amount = 300;
-        atm.deposit(currency);
+        atm.deposit(banknoteList);
 
         //when
-        final Currency withdrawnCurrency = atm.withdraw(amount);
+        final BanknoteList withdrawnBanknoteList = atm.withdraw(amount);
 
         //then
-        Assertions.assertThat(withdrawnCurrency).isEqualTo(currency);
+        Assertions.assertThat(withdrawnBanknoteList).isEqualTo(banknoteList);
     }
 
     @Test
@@ -63,7 +64,7 @@ public class ATMImplTest {
     void shouldThrowWithdrawExceptionForSpecifiedAmount() {
         // given
         int amount = 150;
-        atm.deposit(currency);
+        atm.deposit(banknoteList);
 
         //when
         final Throwable thrown = catchThrowable(() -> atm.withdraw(amount));
@@ -76,10 +77,10 @@ public class ATMImplTest {
     @DisplayName("Should throw ATMInputException if input currency is null")
     void shouldThrowATMInputExceptionOnNullCurrency() {
         // given
-        Currency currency = null;
+        BanknoteList banknoteList = null;
 
         //when
-        final Throwable thrown = catchThrowable(() -> atm.deposit(currency));
+        final Throwable thrown = catchThrowable(() -> atm.deposit(banknoteList));
 
         //then
         Assertions.assertThat(thrown).isInstanceOf(ATMInputException.class);
@@ -89,10 +90,10 @@ public class ATMImplTest {
     @DisplayName("Should throw ATMInputException if banknotes in input currency are empty")
     void shouldThrowATMInputExceptionOnEmptyBanknotes() {
         // given
-        Currency currency = currencyFactory.from();
+        BanknoteList banknoteList = banknoteListFactory.from();
 
         //when
-        final Throwable thrown = catchThrowable(() -> atm.deposit(currency));
+        final Throwable thrown = catchThrowable(() -> atm.deposit(banknoteList));
 
         //then
         Assertions.assertThat(thrown).isInstanceOf(ATMInputException.class);

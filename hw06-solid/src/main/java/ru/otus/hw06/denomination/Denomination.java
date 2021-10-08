@@ -1,6 +1,6 @@
-package ru.otus.hw06.banknote;
+package ru.otus.hw06.denomination;
 
-public enum UnknownBanknote implements Banknote {
+public enum Denomination {
     ONE(1),
     TWO(2),
     FIVE(5),
@@ -11,11 +11,10 @@ public enum UnknownBanknote implements Banknote {
 
     private final int value;
 
-    UnknownBanknote(int value) {
+    Denomination(int value) {
         this.value = value;
     }
 
-    @Override
     public int getValue() {
         return value;
     }
