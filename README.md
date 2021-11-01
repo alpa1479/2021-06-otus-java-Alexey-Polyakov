@@ -10,8 +10,11 @@ Alexey Polyakov / Алексей Поляков<br>
 2. hw02-generics<br>
 3. hw03-reflection<br>
 4. hw04-gc<br>
-5. hw07-structuralPatterns<br>
-6. hw08-io<br>
-7. hw09-jdbc<br>
+5. hw05-byteCodes<br>
+6. hw06-solid<br>
+7. hw07-structuralPatterns<br>
+8. hw08-io<br>
+9. hw09-jdbc<br>
+10. hw10-jpql<br>
 
 Домашнее задание выполнено для курса - "Java Developer. Professional" - https://otus.ru/lessons/java-professional/
