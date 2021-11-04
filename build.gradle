@@ -31,6 +31,14 @@ allprojects {
             dependency("com.google.guava:guava:${Versions.guava}")
             dependency("org.testcontainers:junit-jupiter:${Versions.testcontainers}")
             dependency("org.testcontainers:postgresql:${Versions.testcontainers}")
+            dependency("org.eclipse.jetty:jetty-servlet:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-server:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-webapp:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-security:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-http:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-io:${Versions.jetty}")
+            dependency("org.eclipse.jetty:jetty-util:${Versions.jetty}")
+            dependency("org.freemarker:freemarker:${Versions.freemarker}")
         }
     }
 
