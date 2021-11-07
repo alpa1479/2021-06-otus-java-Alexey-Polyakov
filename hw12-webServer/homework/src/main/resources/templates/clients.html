@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clients</title>
+</head>
+<body>
+
+<h4>List of clients:</h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px"><b>id</b></td>
+        <td style="width: 150px"><b>name</b></td>
+        <td style="width: 150px"><b>address</b></td>
+        <td style="width: 150px"><b>phones</b></td>
+    </tr>
+    </thead>
+    <tbody>
+    <#list clients as client>
+        <tr>
+            <td>${client.id}</td>
+            <td>${client.name}</td>
+            <td>${client.address.street}</td>
+            <td>
+                <#list client.phones as phone>
+                    ${phone.number} <br>
+                </#list>
+            </td>
+        </tr>
+    </#list>
+    </tbody>
+</table>
+
+<h4>Save client:</h4>
+<form action="javascript:saveClient()" method="post">
+    <label for="client-name">Name:</label>
+    <input type="text" id="client-name" placeholder="name" required><br>
+    
+    <label for="client-address">Address:</label>
+    <input type="text" id="client-address" placeholder="address" required><br>
+    
+    <label for="client-primary-phone">Primary phone number:</label>
+    <input type="text" id="client-primary-phone" placeholder="primary phone number" required><br>
+    
+    <button type="submit">Save</button>
+</form>
+
+<h4>Get client by id:</h4>
+<input type="text" id="clientIdTextBox" placeholder="type client id">
+<button onclick="getClientById()">get</button>
+<pre id="clientDataContainer"></pre>
+
+<script src="js/clients.js"></script>
+</body>
+</html>
