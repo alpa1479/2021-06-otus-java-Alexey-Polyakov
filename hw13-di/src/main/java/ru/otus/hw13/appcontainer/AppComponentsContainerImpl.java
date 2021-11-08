@@ -1,5 +1,8 @@
 package ru.otus.hw13.appcontainer;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.hw13.appcontainer.api.AppComponent;
@@ -24,6 +27,16 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     public AppComponentsContainerImpl(Class<?>... configClasses) {
         processConfig(Set.of(configClasses));
+    }
+
+    public AppComponentsContainerImpl(String packageName) {
+        Set<Class<?>> configClasses = getConfigClassesFromPackage(packageName);
+        processConfig(configClasses);
+    }
+
+    private Set<Class<?>> getConfigClassesFromPackage(String packageName) {
+        Reflections reflections = new Reflections(packageName, new SubTypesScanner(), new TypeAnnotationsScanner());
+        return reflections.getTypesAnnotatedWith(AppComponentsContainerConfig.class);
     }
 
     private void processConfig(Set<Class<?>> configClasses) {

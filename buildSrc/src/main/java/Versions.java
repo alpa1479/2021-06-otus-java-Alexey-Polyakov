@@ -3,5 +3,5 @@ public interface Versions {
     String testcontainers = "1.15.3";
     String jetty = "11.0.6";
     String freemarker = "2.3.31";
-    String reflections = "0.9.12";
+    String reflections = "0.9.11";
 }
