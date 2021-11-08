@@ -2,7 +2,8 @@ package ru.otus.hw13;
 
 import ru.otus.hw13.appcontainer.AppComponentsContainerImpl;
 import ru.otus.hw13.appcontainer.api.AppComponentsContainer;
-import ru.otus.hw13.config.AppConfig;
+import ru.otus.hw13.config.AppConfig1;
+import ru.otus.hw13.config.AppConfig2;
 import ru.otus.hw13.services.GameProcessor;
 
 /*
@@ -20,13 +21,13 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         // Опциональные варианты
-        //AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig1.class, AppConfig2.class);
+        AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig1.class, AppConfig2.class);
 
         // Тут можно использовать библиотеку Reflections (см. зависимости)
         //AppComponentsContainer container = new AppComponentsContainerImpl("ru.otus.hw13.config");
 
         // Обязательный вариант
-        AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig.class);
+//        AppComponentsContainer container = new AppComponentsContainerImpl(AppConfig1.class);
 
         // Приложение должно работать в каждом из указанных ниже вариантов
 //        GameProcessor gameProcessor = container.getAppComponent(GameProcessor.class);

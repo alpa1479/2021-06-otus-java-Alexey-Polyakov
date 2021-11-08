@@ -22,17 +22,19 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private final List<Object> appComponents = new ArrayList<>();
     private final Map<String, Object> appComponentsByName = new HashMap<>();
 
-    public AppComponentsContainerImpl(Class<?> initialConfigClass) {
-        processConfig(initialConfigClass);
+    public AppComponentsContainerImpl(Class<?>... initialConfigClasses) {
+        processConfig(initialConfigClasses);
     }
 
-    private void processConfig(Class<?> configClass) {
-        checkConfigClass(configClass);
-        Object configObject = instantiateConfigClass(configClass);
-        Set<Method> appComponentMethods = getMethods(configClass, withAnnotation(AppComponent.class));
-        appComponentMethods.stream()
-                .sorted(Comparator.comparingInt(method -> method.getAnnotation(AppComponent.class).order()))
-                .forEach(appComponentMethod -> instantiateAppComponent(appComponentMethod, configObject));
+    private void processConfig(Class<?>... configClasses) {
+        for (Class<?> configClass : configClasses) {
+            checkConfigClass(configClass);
+            Object configObject = instantiateConfigClass(configClass);
+            Set<Method> appComponentMethods = getMethods(configClass, withAnnotation(AppComponent.class));
+            appComponentMethods.stream()
+                    .sorted(Comparator.comparingInt(method -> method.getAnnotation(AppComponent.class).order()))
+                    .forEach(appComponentMethod -> instantiateAppComponent(appComponentMethod, configObject));
+        }
     }
 
     private void checkConfigClass(Class<?> configClass) {
