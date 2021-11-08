@@ -22,19 +22,21 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private final List<Object> appComponents = new ArrayList<>();
     private final Map<String, Object> appComponentsByName = new HashMap<>();
 
-    public AppComponentsContainerImpl(Class<?>... initialConfigClasses) {
-        processConfig(initialConfigClasses);
+    public AppComponentsContainerImpl(Class<?>... configClasses) {
+        processConfig(Set.of(configClasses));
     }
 
-    private void processConfig(Class<?>... configClasses) {
-        for (Class<?> configClass : configClasses) {
-            checkConfigClass(configClass);
-            Object configObject = instantiateConfigClass(configClass);
-            Set<Method> appComponentMethods = getMethods(configClass, withAnnotation(AppComponent.class));
-            appComponentMethods.stream()
-                    .sorted(Comparator.comparingInt(method -> method.getAnnotation(AppComponent.class).order()))
-                    .forEach(appComponentMethod -> instantiateAppComponent(appComponentMethod, configObject));
-        }
+    private void processConfig(Set<Class<?>> configClasses) {
+        Objects.requireNonNull(configClasses, "Set of config classes should not be null");
+        configClasses.stream().sorted(Comparator.comparingInt(method -> method.getAnnotation(AppComponentsContainerConfig.class).order()))
+                .forEach(configClass -> {
+                    checkConfigClass(configClass);
+                    Object configObject = instantiateConfigClass(configClass);
+                    Set<Method> appComponentMethods = getMethods(configClass, withAnnotation(AppComponent.class));
+                    appComponentMethods.stream()
+                            .sorted(Comparator.comparingInt(method -> method.getAnnotation(AppComponent.class).order()))
+                            .forEach(appComponentMethod -> instantiateAppComponent(appComponentMethod, configObject));
+                });
     }
 
     private void checkConfigClass(Class<?> configClass) {
