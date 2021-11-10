@@ -12,7 +12,6 @@ import ru.otus.hw13.appcontainer.api.AppComponentsContainerConfig;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.*;
 
 import static org.reflections.ReflectionUtils.getMethods;
@@ -70,48 +69,47 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     private void instantiateAppComponent(Method appComponentMethod, Object configObject) {
         try {
-            Object appComponent;
-            int parameterCount = appComponentMethod.getParameterCount();
-            if (parameterCount > 0) {
-                List<Object> arguments = new ArrayList<>();
-                Parameter[] parameters = appComponentMethod.getParameters();
-                for (Parameter parameter : parameters) {
-                    getComponentByTypeName(parameter.getType().getName()).ifPresent(arguments::add);
-                }
-                appComponent = appComponentMethod.invoke(configObject, arguments.toArray());
-            } else {
-                appComponent = appComponentMethod.invoke(configObject);
-            }
-            appComponents.add(appComponent);
-            appComponentsByName.put(getAppComponentName(appComponentMethod), appComponent);
+            Class<?>[] parameterTypes = appComponentMethod.getParameterTypes();
+            Object[] components = getComponentsByTypes(parameterTypes);
+            Object appComponent = appComponentMethod.invoke(configObject, components);
+            addComponentIfAbsent(appComponentMethod, appComponent);
         } catch (IllegalAccessException | InvocationTargetException e) {
             log.error("error during execution of appComponentMethod - {}", appComponentMethod.getName());
             throw new RuntimeException(e);
         }
     }
 
-    private Optional<Object> getComponentByTypeName(String typeName) {
-        return appComponents.stream()
-                .filter(component -> containsClassOrInterfaceWithName(typeName, component))
-                .findFirst();
+    private Object[] getComponentsByTypes(Class<?>[] parameterTypes) {
+        return Arrays.stream(parameterTypes)
+                .map(this::getComponentByType)
+                .map(Optional::orElseThrow)
+                .toArray();
     }
 
-    private boolean containsClassOrInterfaceWithName(String typeName, Object component) {
-        Class<?> componentClass = component.getClass();
-        Class<?>[] interfaces = componentClass.getInterfaces();
-        return componentClass.getName().equals(typeName) || Arrays.stream(interfaces)
-                .map(Class::getName)
-                .anyMatch(interfaceName -> interfaceName.equals(typeName));
+    private Optional<Object> getComponentByType(Class<?> parameterType) {
+        return appComponents.stream()
+                .filter(component -> parameterType.isAssignableFrom(component.getClass()))
+                .findFirst();
     }
 
     private String getAppComponentName(Method appComponentMethod) {
         return appComponentMethod.getAnnotation(AppComponent.class).name();
     }
 
+    private void addComponentIfAbsent(Method appComponentMethod, Object appComponent) {
+        String appComponentName = getAppComponentName(appComponentMethod);
+        if (!appComponentsByName.containsKey(appComponentName)) {
+            appComponentsByName.put(appComponentName, appComponent);
+            appComponents.add(appComponent);
+        } else {
+            throw new IllegalArgumentException(String.format("trying to add component with the same name - %s", appComponentMethod.getName()));
+        }
+    }
+
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
         // find in the list of objects, object with the same class or implemented interface
-        return (C) getComponentByTypeName(componentClass.getName()).orElse(null);
+        return (C) getComponentByType(componentClass).orElse(null);
     }
 
     @Override
