@@ -16,5 +16,9 @@ Alexey Polyakov / Алексей Поляков<br>
 8. hw08-io<br>
 9. hw09-jdbc<br>
 10. hw10-jpql<br>
+11. hw11-cache<br>
+12. hw12-webServer<br>
+13. hw13-di<br>
+14. hw14-springDataJdbc<br>
 
 Домашнее задание выполнено для курса - "Java Developer. Professional" - https://otus.ru/lessons/java-professional/
