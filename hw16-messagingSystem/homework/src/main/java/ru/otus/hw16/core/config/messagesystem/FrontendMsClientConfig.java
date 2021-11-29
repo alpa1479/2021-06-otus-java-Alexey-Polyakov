@@ -15,9 +15,10 @@ import ru.otus.hw16.model.message.MessageType;
 public class FrontendMsClientConfig {
 
     @Bean
-    public HandlersStore frontendHandlersStore(@Qualifier("saveClientResponseMessageHandler") MessageHandler messageHandler) {
+    public HandlersStore frontendHandlersStore(@Qualifier("callbackResponseMessageHandler") MessageHandler callbackMessageHandler) {
         HandlersStoreImpl handlersStore = new HandlersStoreImpl();
-        handlersStore.addHandler(MessageType.SAVE_CLIENT, messageHandler);
+        handlersStore.addHandler(MessageType.SAVE_CLIENT, callbackMessageHandler);
+        handlersStore.addHandler(MessageType.GET_CLIENTS, callbackMessageHandler);
         return handlersStore;
     }
 

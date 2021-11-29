@@ -18,7 +18,7 @@ import java.util.Set;
 public class ClientRepositoryTest extends BasePersistenceTest {
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     @Test
     @DisplayName("should find all clients")

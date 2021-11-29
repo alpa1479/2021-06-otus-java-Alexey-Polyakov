@@ -8,9 +8,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
-import ru.otus.hw16.core.config.common.DataSourceConfig;
-import ru.otus.hw16.core.config.common.FlywayConfig;
 import ru.otus.hw16.core.repository.ClientRepositoryTest;
 
 @TestConfiguration
@@ -21,7 +18,6 @@ import ru.otus.hw16.core.repository.ClientRepositoryTest;
         FlywayAutoConfiguration.class,
         JacksonAutoConfiguration.class
 })
-@Import({DataSourceConfig.class, FlywayConfig.class})
 @ComponentScan(basePackageClasses = ClientRepositoryTest.class)
 public class TestPersistenceConfiguration {
 }

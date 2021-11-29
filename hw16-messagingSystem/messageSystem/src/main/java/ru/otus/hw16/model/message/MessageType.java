@@ -7,7 +7,8 @@ import lombok.Getter;
 public enum MessageType {
 
     VOID("Void"),
-    SAVE_CLIENT("SaveClient");
+    SAVE_CLIENT("SaveClient"),
+    GET_CLIENTS("GetClients");
 
     @Getter
     private final String name;

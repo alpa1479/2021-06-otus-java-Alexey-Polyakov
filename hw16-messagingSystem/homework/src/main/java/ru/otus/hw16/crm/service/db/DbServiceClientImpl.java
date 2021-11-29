@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import ru.otus.hw16.core.repository.ClientRepository;
 import ru.otus.hw16.core.transactionmanager.TransactionManager;
 import ru.otus.hw16.crm.model.Client;
+import ru.otus.hw16.crm.model.ClientsList;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,15 +31,19 @@ public class DbServiceClientImpl implements DbServiceClient {
 
     @Override
     public Optional<Client> getClient(long id) {
-        var clientOptional = clientRepository.findById(id);
-        log.info("client: {}", clientOptional);
-        return clientOptional;
+        return transactionManager.doInReadOnlyTransaction(() -> {
+            var clientOptional = clientRepository.findById(id);
+            log.info("client: {}", clientOptional);
+            return clientOptional;
+        });
     }
 
     @Override
-    public List<Client> findAll() {
-        var clientList = clientRepository.findAll();
-        log.info("clientList: {}", clientList);
-        return clientList;
+    public ClientsList findAll() {
+        return transactionManager.doInReadOnlyTransaction(() -> {
+            var clientList = clientRepository.findAll();
+            log.info("clientList: {}", clientList);
+            return new ClientsList(clientList);
+        });
     }
 }

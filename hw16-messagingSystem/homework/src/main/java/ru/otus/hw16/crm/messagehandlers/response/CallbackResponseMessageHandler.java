@@ -9,10 +9,10 @@ import ru.otus.hw16.model.resultdatatype.ResultDataType;
 
 import java.util.Optional;
 
-@Component("saveClientResponseMessageHandler")
-public class SaveClientResponseMessageHandler implements MessageHandler {
+@Component("callbackResponseMessageHandler")
+public class CallbackResponseMessageHandler implements MessageHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(SaveClientResponseMessageHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(CallbackResponseMessageHandler.class);
 
     @Override
     public <T extends ResultDataType> Optional<Message<T>> handle(Message<T> msg) {

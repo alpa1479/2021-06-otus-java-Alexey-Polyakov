@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.hw16.client.MsClient;
 import ru.otus.hw16.crm.model.Client;
+import ru.otus.hw16.crm.model.ClientsList;
 import ru.otus.hw16.model.message.Message;
 import ru.otus.hw16.model.message.MessageCallback;
 import ru.otus.hw16.model.message.MessageType;
@@ -19,6 +20,12 @@ public class FrontendServiceImpl implements FrontendService {
                                @Qualifier("frontendMsClient") MsClient frontendMsClient) {
         this.targetClientName = targetClientName;
         this.frontendMsClient = frontendMsClient;
+    }
+
+    @Override
+    public void getClients(MessageCallback<ClientsList> clientConsumer) {
+        Message<ClientsList> message = frontendMsClient.produceMessage(targetClientName, null, MessageType.GET_CLIENTS, clientConsumer);
+        frontendMsClient.sendMessage(message);
     }
 
     @Override

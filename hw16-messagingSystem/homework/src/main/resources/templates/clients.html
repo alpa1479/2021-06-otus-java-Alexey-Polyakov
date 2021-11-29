@@ -24,7 +24,7 @@
     </tr>
     </thead>
     <tbody id="clients">
-    <tr th:each="client : ${clients}">
+    <tr th:each="client : ${clientsList.getClients()}">
         <td th:text="${client.id}">1</td>
         <td th:text="${client.name}">John Doe</td>
         <td th:text="${client.address.street}">John Doe</td>

@@ -15,9 +15,11 @@ import ru.otus.hw16.model.message.MessageType;
 public class DbMsClientConfig {
 
     @Bean
-    public HandlersStore dbHandlersStore(@Qualifier("saveClientRequestMessageHandler") MessageHandler messageHandler) {
+    public HandlersStore dbHandlersStore(@Qualifier("saveClientRequestMessageHandler") MessageHandler saveClientMessageHandler,
+                                         @Qualifier("getClientsRequestMessageHandler") MessageHandler getClientsMessageHandler) {
         HandlersStoreImpl handlersStore = new HandlersStoreImpl();
-        handlersStore.addHandler(MessageType.SAVE_CLIENT, messageHandler);
+        handlersStore.addHandler(MessageType.SAVE_CLIENT, saveClientMessageHandler);
+        handlersStore.addHandler(MessageType.GET_CLIENTS, getClientsMessageHandler);
         return handlersStore;
     }
 

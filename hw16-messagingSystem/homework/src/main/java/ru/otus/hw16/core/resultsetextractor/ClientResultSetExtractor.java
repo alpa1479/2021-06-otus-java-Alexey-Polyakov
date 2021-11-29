@@ -8,22 +8,21 @@ import ru.otus.hw16.crm.model.Phone;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ClientResultSetExtractor implements ResultSetExtractor<List<Client>> {
 
     @Override
     public List<Client> extractData(ResultSet rs) throws SQLException, DataAccessException {
         var clients = new ArrayList<Client>();
-        Client previousClient = null;
+        Map<Long, Client> previousClients = new HashMap<>();
         while (rs.next()) {
             var clientId = rs.getLong("id");
-            if (previousClient == null || previousClient.getId() != clientId) {
+            var previousClient = previousClients.get(clientId);
+            if (previousClient == null) {
                 previousClient = new Client(clientId, rs.getString("name"), extractAddress(rs), createPhonesSet(rs));
                 clients.add(previousClient);
+                previousClients.put(clientId, previousClient);
             } else {
                 Phone phone = extractPhone(rs);
                 previousClient.addPhone(phone);

@@ -27,9 +27,9 @@ public class TestContainersConfig {
         public void start() {
             super.start();
             var url = container.getJdbcUrl() + "&stringtype=unspecified";
-            System.setProperty("spring.datasource.demo-db.jdbcUrl", url);
-            System.setProperty("spring.datasource.demo-db.username", container.getUsername());
-            System.setProperty("spring.datasource.demo-db.password", container.getPassword());
+            System.setProperty("spring.datasource.url", url);
+            System.setProperty("spring.datasource.username", container.getUsername());
+            System.setProperty("spring.datasource.password", container.getPassword());
 
             logger.info("postgres in docker started: url={}", url);
         }

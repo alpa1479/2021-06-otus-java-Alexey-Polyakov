@@ -12,8 +12,13 @@ const connect = () => {
     stompClient.connect({}, (frame) => {
         switchConnection(true)
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/client/response', (response) => showClient(JSON.parse(response.body)));
         stompClient.subscribe('/topic/currentTime', (time) => document.getElementById("currentTime").innerHTML = time.body);
+        stompClient.subscribe('/topic/client/response/get/clients', (response) => showClients(response));
+        stompClient.subscribe('/topic/client/response/save/client', (isClientSaved) =>  {
+            if (isClientSaved) {
+                stompClient.send("/app/get/clients", {}, '')
+            }
+        });
     });
 }
 
@@ -38,9 +43,22 @@ const save = () => {
         ]
     };
     if (connected) {
-        stompClient.send("/app/client", {}, JSON.stringify(client))
+        stompClient.send("/app/save/client", {}, JSON.stringify(client))
     } else {
         saveClient(client);
+    }
+}
+
+const showClients = (response) => {
+    window.document.getElementById("clients").innerHTML = null
+    for (const client of JSON.parse(response.body).clients) {
+          $("#clients")
+                      .append("<tr>")
+                      .append("<td>" + client.id + "</td>")
+                      .append("<td>" + client.name + "</td>")
+                      .append("<td>" + client.address.street + "</td>")
+                      .append("<td>" + client.phones[0].number + "</td>")
+                      .append("</tr>")
     }
 }
 
