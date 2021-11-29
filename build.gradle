@@ -28,9 +28,18 @@ allprojects {
             imports {
                 mavenBom("org.springframework.boot:spring-boot-dependencies:2.5.2")
             }
+
+            dependency("org.projectlombok:lombok:${Versions.lombok}")
+
+            dependency("org.webjars:sockjs-client:${Versions.sockjs}")
+            dependency("org.webjars:stomp-websocket:${Versions.stomp}")
+            dependency("org.webjars:bootstrap:${Versions.bootstrap}")
+
             dependency("com.google.guava:guava:${Versions.guava}")
+
             dependency("org.testcontainers:junit-jupiter:${Versions.testcontainers}")
             dependency("org.testcontainers:postgresql:${Versions.testcontainers}")
+
             dependency("org.eclipse.jetty:jetty-servlet:${Versions.jetty}")
             dependency("org.eclipse.jetty:jetty-server:${Versions.jetty}")
             dependency("org.eclipse.jetty:jetty-webapp:${Versions.jetty}")
@@ -38,7 +47,9 @@ allprojects {
             dependency("org.eclipse.jetty:jetty-http:${Versions.jetty}")
             dependency("org.eclipse.jetty:jetty-io:${Versions.jetty}")
             dependency("org.eclipse.jetty:jetty-util:${Versions.jetty}")
+
             dependency("org.freemarker:freemarker:${Versions.freemarker}")
+
             dependency("org.reflections:reflections:${Versions.reflections}")
         }
     }

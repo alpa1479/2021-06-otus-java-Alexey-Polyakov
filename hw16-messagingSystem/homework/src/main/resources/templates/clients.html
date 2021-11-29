@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clients</title>
+</head>
+<body>
+
+<h4>Working with WS:</h4>
+<button id="connect" type="submit">connect</button>
+<button id="disconnect" type="submit">disconnect</button>
+
+<h4>List of clients:</h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px"><b>id</b></td>
+        <td style="width: 150px"><b>name</b></td>
+        <td style="width: 150px"><b>address</b></td>
+        <td style="width: 150px"><b>phones</b></td>
+    </tr>
+    </thead>
+    <tbody id="clients">
+    <tr th:each="client : ${clientsList.getClients()}">
+        <td th:text="${client.id}">1</td>
+        <td th:text="${client.name}">John Doe</td>
+        <td th:text="${client.address.street}">John Doe</td>
+        <td th:text="${client.phones[0].number}">John Doe</td>
+    </tr>
+    </tbody>
+</table>
+
+<h4>Save client:</h4>
+<form method="post">
+    <label for="client-name">Name:</label>
+    <input type="text" id="client-name" placeholder="name" required><br>
+
+    <label for="client-address">Address:</label>
+    <input type="text" id="client-address" placeholder="address" required><br>
+
+    <label for="client-primary-phone">Primary phone number:</label>
+    <input type="text" id="client-primary-phone" placeholder="primary phone number" required><br>
+
+    <button id="save" type="submit">Save</button>
+</form>
+
+<h4>Get client by id:</h4>
+<input type="text" id="clientIdTextBox" placeholder="type client id">
+<button onclick="getClientById()">get</button>
+<pre id="clientDataContainer"></pre>
+
+<h4>Current time:</h4>
+<div id="currentTime"></div>
+
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script src="js/clients.js"></script>
+</body>
+</html>
