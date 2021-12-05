@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ru.otus.hw17.protobuf.generated;
+
+option java_multiple_files = true;
+
+message RangeMessage {
+  int32 firstValue = 1;
+  int32 lastValue = 2;
+  int32 delayInSeconds = 3;
+}
+
+message GeneratedNumberMessage {
+  int32 value = 1;
+}
+
+service RemoteNumberGenerator {
+  rpc generateNumberSequence(RangeMessage) returns (stream GeneratedNumberMessage);
+}
