@@ -6,6 +6,7 @@ Alexey Polyakov / Алексей Поляков<br>
 <i>telegram:</i> alexey_polyakov_t<br>
 
 ### Список директорий с заданиями
+
 1. hw01-gradle<br>
 2. hw02-generics<br>
 3. hw03-reflection<br>
@@ -20,5 +21,8 @@ Alexey Polyakov / Алексей Поляков<br>
 12. hw12-webServer<br>
 13. hw13-di<br>
 14. hw14-springDataJdbc<br>
+15. hw15-executors<br>
+16. hw16-messagingSystem<br>
+17. hw17-multiprocess<br>
 
 Домашнее задание выполнено для курса - "Java Developer. Professional" - https://otus.ru/lessons/java-professional/
