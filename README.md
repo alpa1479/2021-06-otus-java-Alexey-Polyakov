@@ -2,8 +2,8 @@
 
 Alexey Polyakov / Алексей Поляков<br>
 
-<i>email:</i> alexey.polyakov.p@gmail.com<br>
-<i>telegram:</i> alexey_polyakov_t<br>
+<i>email:</i> alpa1479@gmail.com<br>
+<i>telegram:</i> alpa1479<br>
 
 ### Список директорий с заданиями
 
